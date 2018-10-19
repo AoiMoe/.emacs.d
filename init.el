@@ -259,14 +259,14 @@
                         '(cursor-color . "red")
                         '(font . "fontset-standard")
                         '(width . 160)
-                        '(height . 50)
+                        '(height . 60)
                         ))
   (setq default-frame-alist (append my-frame-param default-frame-alist))
   (setq initial-frame-alist (append my-frame-param initial-frame-alist))
   (setq-default line-spacing 2)
   (set-fontset-font "fontset-standard"
                     'ascii
-                    (font-spec :family "RictyDiminished" :size 15) nil 'prepend)
+                    (font-spec :family "RictyDiminished" :size 14) nil 'prepend)
   (set-fontset-font "fontset-standard"
                     'japanese-jisx0213.2004-1
                     (font-spec :family "RictyDiminished") nil 'prepend)
