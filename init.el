@@ -416,18 +416,17 @@ Customize `guess-style-lighter-format-func' to change the variables."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(my-face-warn-zenkaku ((t (:background "gray"))))
  '(font-lock-comment-face ((t (:foreground "Firebrick"))))
- '(font-lock-string-face ((t (:foreground "Gray50"))))
- '(font-lock-keyword-face ((t (:foreground "#009999"))))
+ '(font-lock-constant-face ((t (:foreground "DarkOrange3"))))
  '(font-lock-function-name-face ((t (:foreground "Blue"))))
- '(font-lock-variable-name-face ((t (:foreground "#886600"))))
+ '(font-lock-keyword-face ((t (:foreground "#009999"))))
+ '(font-lock-string-face ((t (:foreground "Gray50"))))
  '(font-lock-type-face ((t (:foreground "#00AA00"))))
- '(my-face-warn-zenkaku ((t (:background "gray"))))
- '(my-face-warn-over-columns ((t (:background "gray"))))
- '(my-face-warn ((t (:background "#FFAAAA" :underline t))))
- '(my-face-tab ((t (:foreground "#DDFFFF" :underline t))))
- )
+ '(font-lock-variable-name-face ((t (:foreground "#886600"))))
+ '(my-face-tab ((t (:foreground "#DDFFFF" :underline t))) t)
+ '(my-face-warn ((t (:background "#FFAAAA" :underline t))) t)
+ '(my-face-warn-over-columns ((t (:background "gray"))) t)
+ '(my-face-warn-zenkaku ((t (:background "gray"))) t))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
