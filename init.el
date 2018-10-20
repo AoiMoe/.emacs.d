@@ -231,24 +231,18 @@
                              '(border-color . "black")
                              '(mouse-color . "white")
                              '(cursor-color . "black")
-                                        ;                   '(font . "private-fontset")
                              '(width . 160)
                              '(height . 50)
                              ))
   (setq default-frame-alist (append my-frame-param default-frame-alist))
   (setq initial-frame-alist (append my-frame-param initial-frame-alist))
-  (when (<= emacs-major-version 22)
+  (global-unset-key "\C-o")
+  (when (functionp 'mw32-ime-initialize)
     (setq-default mw32-ime-mode-line-state-indicator "[--]")
     (setq mw32-ime-mode-line-state-indicator-list '("[--]" "[あ]""[--]"))
     (set-input-method "MW32-IME")
     (mw32-ime-initialize))
-  (when (>= emacs-major-version 24)
-;      (setq-default w32-ime-mode-line-state-indicator "[--]")
-;      (setq w32-ime-mode-line-state-indicator-list '("[--]" "[あ]""[--]"))
-;      (set-input-method "W32-IME")
-;      (w32-ime-initialize)
-        (global-unset-key "\C-o")
-        ))
+  )
 
 (when (eq system-type 'gnu/linux)
   (setq my-frame-param (list
@@ -288,10 +282,11 @@
 
 
 ;;; rust
-(add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
 (use-package company-racer
+  :if (file-directory-p "~/.cargo/bin")
   :config
   (progn
+    (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
     (with-eval-after-load 'company
       (add-to-list 'company-backends 'company-racer))
     (add-hook 'rust-mode-hook #'racer-mode)
@@ -305,6 +300,7 @@
 
 ;;; erlang
 (use-package erlang-start
+  :if (file-directory-p "~/erlang/tools/emacs")
   :load-path "~/erlang/tools/emacs"
   :init
   (progn
