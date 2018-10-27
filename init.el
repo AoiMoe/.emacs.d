@@ -23,22 +23,28 @@
 (make-face 'my-face-warn)
 (make-face 'my-face-tab)
 (defadvice font-lock-mode (before my-font-lock-mode ())
-  (font-lock-add-keywords
-   major-mode
-   '(
-     ("\t" 0 'my-face-tab append)
-     ("　" 0 'my-face-warn-zenkaku append)
-     (" +\t" 0 'my-face-warn append)
-     ("[ \t]+$" 0 'my-face-warn append)
-     ;; warning line exceeds 120 columns
-     ("^[^\n]\\{120\\}\\(.*\\)$" 1 'my-face-warn-over-columns t)
-     ;; warning spaces just after brackets
-     ("\\(\\({\\|\\[\\|(\\)[[:space:]]+\\)[^[:space:]\n]" 1 'my-face-warn t)
-     ;; warning spaces just before brackets
-     ("[^[:space:]\n]\\([[:space:]]+\\(}\\|\\]\\|)\\)\\)" 1 'my-face-warn t)
-     ;; warning no space just after comma
-     (",[^[:space:]*?\n]" 0 'my-face-warn t)
-     )))
+  (progn
+    (font-lock-add-keywords
+     major-mode
+     '(
+       ("\t" 0 'my-face-tab append)
+       ("　" 0 'my-face-warn-zenkaku append)
+       (" +\t" 0 'my-face-warn append)
+       ("[ \t]+$" 0 'my-face-warn append)
+       ))
+    (font-lock-add-keywords
+     'erlang-mode
+     '(
+       ;; warning line exceeds 120 columns
+       ("^[^\n]\\{120\\}\\(.*\\)$" 1 'my-face-warn-over-columns t)
+       ;; warning spaces just after brackets
+       ("\\(\\({\\|\\[\\|(\\)[[:space:]]+\\)[^[:space:]\n]" 1 'my-face-warn t)
+       ;; warning spaces just before brackets
+       ("[^[:space:]\n]\\([[:space:]]+\\(}\\|\\]\\|)\\)\\)" 1 'my-face-warn t)
+       ;; warning no space just after comma
+       (",[^[:space:]*?\n]" 0 'my-face-warn t)
+       ))
+    ))
 (ad-enable-advice 'font-lock-mode 'before 'my-font-lock-mode)
 (ad-activate 'font-lock-mode)
 
