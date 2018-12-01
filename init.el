@@ -290,16 +290,15 @@
 (use-package company-racer
   :if (file-directory-p "~/.cargo/bin")
   :config
-  (progn
-    (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
-    (with-eval-after-load 'company
-      (add-to-list 'company-backends 'company-racer))
-    (add-hook 'rust-mode-hook #'racer-mode)
-    (add-hook 'rust-mode-hook #'flycheck-rust-setup)
-    (add-hook 'racer-mode-hook #'eldoc-mode)
-    (add-hook 'racer-mode-hook #'company-mode)
-    (add-hook 'after-init-hook #'global-flycheck-mode)
-    (setq company-tooltip-align-annotations t))
+  (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
+  (with-eval-after-load 'company
+    (add-to-list 'company-backends 'company-racer))
+  (add-hook 'rust-mode-hook #'racer-mode)
+  (add-hook 'rust-mode-hook #'flycheck-rust-setup)
+  (add-hook 'racer-mode-hook #'eldoc-mode)
+  (add-hook 'racer-mode-hook #'company-mode)
+  (add-hook 'after-init-hook #'global-flycheck-mode)
+  (setq company-tooltip-align-annotations t)
   )
 
 
@@ -308,35 +307,30 @@
   :if (file-directory-p "~/erlang/tools/emacs")
   :load-path "~/erlang/tools/emacs"
   :init
-  (progn
-    (setq erlang-root-dir "~/erlang/otp")
-    (setq exec-path (cons "~/erlang/otp/bin" exec-path)))
+  (setq erlang-root-dir "~/erlang/otp")
+  (setq exec-path (cons "~/erlang/otp/bin" exec-path))
   )
 
 
 ;;;
 (use-package helm
   :config
-  (progn
-    (require 'helm-config)
-    (global-set-key (kbd "C-c h") 'helm-mini)
-    (global-set-key (kbd "C-c y") 'helm-show-kill-ring)
-    )
+  (require 'helm-config)
+  (global-set-key (kbd "C-c h") 'helm-mini)
+  (global-set-key (kbd "C-c y") 'helm-show-kill-ring)
   )
 
 
 ;;;
 (use-package auto-complete-c-headers
   :config
-  (progn
-    (add-to-list 'ac-sources 'ac-source-c-headers)
-    (global-auto-complete-mode t)
-    (define-key ac-completing-map (kbd "C-n") 'ac-next)
-    (define-key ac-completing-map (kbd "C-p") 'ac-previous)
-    (define-key ac-completing-map (kbd "C-j") 'ac-complete)
-    (setq ac-auto-start nil)
-    (ac-set-trigger-key "TAB")
-    )
+  (add-to-list 'ac-sources 'ac-source-c-headers)
+  (global-auto-complete-mode t)
+  (define-key ac-completing-map (kbd "C-n") 'ac-next)
+  (define-key ac-completing-map (kbd "C-p") 'ac-previous)
+  (define-key ac-completing-map (kbd "C-j") 'ac-complete)
+  (setq ac-auto-start nil)
+  (ac-set-trigger-key "TAB")
   )
 
 
