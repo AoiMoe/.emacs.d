@@ -392,7 +392,7 @@ for the current buffer."
 
     (defun guess-style-lighter-default-format-func ()
       (concat (when (boundp 'c-basic-offset) (format " >%d" c-basic-offset))
-	      " " (if indent-tabs-mode (format "t%d" tab-width) "spc")))
+              " " (if indent-tabs-mode (format "t%d" tab-width) "spc")))
 
     (define-minor-mode guess-style-info-mode
       "Minor mode to show guessed variables in the mode-line.
@@ -404,8 +404,8 @@ Customize `guess-style-lighter-format-func' to change the variables."
 
     ;; providing a lighter in `define-minor-mode' doesn't allow :eval forms
     (add-to-list 'minor-mode-alist
-		 '(guess-style-info-mode
-		   ((:eval (funcall guess-style-lighter-format-func)))))
+                 '(guess-style-info-mode
+                   ((:eval (funcall guess-style-lighter-format-func)))))
     (global-guess-style-info-mode 1))
   )
 
