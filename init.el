@@ -309,6 +309,11 @@
   :init
   (setq erlang-root-dir "~/erlang/otp")
   (setq exec-path (cons "~/erlang/otp/bin" exec-path))
+  (add-hook 'erlang-mode-hook
+            (lambda ()
+              (setq indent-tabs-mode nil)
+              (setq erlang-indent-guard 4)
+              (setq erlang-argument-indent 4)))
   )
 
 
