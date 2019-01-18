@@ -281,8 +281,8 @@
   :diminish flycheck-mode
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
-  (setq flycheck-erlang-include-path '("../include")
-        flycheck-erlang-library-path '()
+  (setq flycheck-erlang-include-path '("../include" ".." "../deps" "../_build/default/lib")
+        flycheck-erlang-executable (expand-file-name "~/erlang/otp/bin/erlc")
         flycheck-check-syntax-automatically '(save)))
 
 
