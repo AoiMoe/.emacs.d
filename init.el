@@ -88,6 +88,7 @@
 (setq electric-indent-mode nil)
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
+(setq split-width-threshold nil)
 
 
 ;;; cc-mode
