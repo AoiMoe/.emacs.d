@@ -439,7 +439,11 @@ Customize `guess-style-lighter-format-func' to change the variables."
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(safe-local-variable-values
    (quote
-    ((tab-stop . 4)
+    ((flycheck-gcc-include-path quote
+				(".."))
+     (flycheck-gcc-include quote
+			   (".."))
+     (tab-stop . 4)
      (c-offsets-alist
       (knr-argdecl-intro . +)
       (knr-argdecl . 0)
