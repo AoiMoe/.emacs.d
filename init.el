@@ -224,12 +224,13 @@
 ;;; window system settings
 (tool-bar-mode 0)
 (when (eq system-type 'windows-nt)
-  (set-face-attribute 'default nil
-                      :family "ＭＳ ゴシック"
-                      :height 130)
-  (set-fontset-font "fontset-default"
-                    'japanese-jisx0208
-                    '("ＭＳ ゴシック" . "jisx0208-sjis"))
+  (let* ((use-font-name (if (x-list-fonts "Ricty Diminished") "Ricty Diminished" "ＭＳ ゴシック")))
+    (set-face-attribute 'default nil
+                        :family use-font-name
+                        :height 130)
+    (set-fontset-font "fontset-default"
+                      'japanese-jisx0208
+                      (cons use-font-name "jisx0208-sjis")))
 
   (set-clipboard-coding-system 'sjis-dos)
   (set-w32-system-coding-system 'sjis)
@@ -438,6 +439,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
  '(c-default-style "knf")
  '(dtrt-indent-min-soft-tab-superiority 5000.0)
  '(dtrt-indent-mode t nil (dtrt-indent))
+ '(package-selected-packages (quote (auto-complete-c-headers helm flycheck use-package)))
  '(safe-local-variable-values
    (quote
     ((flycheck-gcc-include-path quote
