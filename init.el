@@ -89,6 +89,7 @@
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
 (setq split-width-threshold nil)
+(setq indent-tabs-mode nil)
 
 
 ;;; cc-mode
