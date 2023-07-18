@@ -89,6 +89,7 @@
 (set-language-environment "Japanese")
 (prefer-coding-system 'utf-8)
 (setq split-width-threshold nil)
+(setq-default indent-tabs-mode nil)
 
 
 ;;; cc-mode
@@ -274,6 +275,7 @@
   (require 'mozc)
   (setq default-input-method "japanese-mozc")
   (global-set-key "\C-o" 'toggle-input-method)
+  (global-set-key [henkan] 'toggle-input-method)
   )
 
 
@@ -288,6 +290,11 @@
 
 
 ;;; rust
+(use-package rust-mode
+  :config
+  (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
+  )
+
 (use-package company-racer
   :if (file-directory-p "~/.cargo/bin")
   :config
@@ -328,16 +335,16 @@
 
 
 ;;;
-(use-package auto-complete-c-headers
-  :config
-  (add-to-list 'ac-sources 'ac-source-c-headers)
-  (global-auto-complete-mode t)
-  (define-key ac-completing-map (kbd "C-n") 'ac-next)
-  (define-key ac-completing-map (kbd "C-p") 'ac-previous)
-  (define-key ac-completing-map (kbd "C-j") 'ac-complete)
-  (setq ac-auto-start nil)
-  (ac-set-trigger-key "TAB")
-  )
+;; (use-package auto-complete-c-headers
+;;   :config
+;;   (add-to-list 'ac-sources 'ac-source-c-headers)
+;;   (global-auto-complete-mode t)
+;;   (define-key ac-completing-map (kbd "C-n") 'ac-next)
+;;   (define-key ac-completing-map (kbd "C-p") 'ac-previous)
+;;   (define-key ac-completing-map (kbd "C-j") 'ac-complete)
+;;   (setq ac-auto-start nil)
+;;   (ac-set-trigger-key "TAB")
+;;   )
 
 
 ;;;
@@ -410,6 +417,14 @@ Customize `guess-style-lighter-format-func' to change the variables."
     (global-guess-style-info-mode 1))
   )
 
+;;; Lua
+(use-package lua-mode
+  :init
+  (add-hook 'lua-mode-hook
+            (lambda()
+              (setq indent-tabs-mode nil)
+              (setq lua-indent-level 2)))
+  )
 
 ;;; Customs:
 (custom-set-faces
@@ -437,6 +452,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
  '(c-default-style "knf")
  '(dtrt-indent-min-soft-tab-superiority 5000.0)
  '(dtrt-indent-mode t nil (dtrt-indent))
+ '(ruby-insert-encoding-magic-comment nil)
  '(safe-local-variable-values
    (quote
     ((tab-stop . 4)
