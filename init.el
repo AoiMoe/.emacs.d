@@ -224,13 +224,12 @@
 ;;; window system settings
 (tool-bar-mode 0)
 (when (eq system-type 'windows-nt)
-  (let* ((use-font-name (if (x-list-fonts "Ricty Diminished") "Ricty Diminished" "ＭＳ ゴシック")))
-    (set-face-attribute 'default nil
-                        :family use-font-name
-                        :height 130)
-    (set-fontset-font "fontset-default"
-                      'japanese-jisx0208
-                      (cons use-font-name "jisx0208-sjis")))
+  (set-face-attribute 'default nil
+                      :family "ＭＳ ゴシック"
+                      :height 130)
+  (set-fontset-font "fontset-default"
+                    'japanese-jisx0208
+                    '("ＭＳ ゴシック" . "jisx0208-sjis"))
 
   (set-clipboard-coding-system 'sjis-dos)
   (set-w32-system-coding-system 'sjis)
@@ -276,7 +275,6 @@
   (require 'mozc)
   (setq default-input-method "japanese-mozc")
   (global-set-key "\C-o" 'toggle-input-method)
-  (global-set-key [henkan] 'toggle-input-method)
   )
 
 
