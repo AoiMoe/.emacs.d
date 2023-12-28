@@ -239,17 +239,36 @@
                              '(border-color . "black")
                              '(mouse-color . "white")
                              '(cursor-color . "black")
-                             '(width . 160)
-                             '(height . 50)
+                             '(width . 200)
+                             '(height . 60)
                              ))
   (setq default-frame-alist (append my-frame-param default-frame-alist))
   (setq initial-frame-alist (append my-frame-param initial-frame-alist))
   (global-unset-key "\C-o")
-  (when (functionp 'mw32-ime-initialize)
-    (setq-default mw32-ime-mode-line-state-indicator "[--]")
-    (setq mw32-ime-mode-line-state-indicator-list '("[--]" "[あ]""[--]"))
-    (set-input-method "MW32-IME")
-    (mw32-ime-initialize))
+
+  ;; tr-ime
+  (unless (package-installed-p 'tr-ime)
+    (package-refresh-contents)
+    (package-install 'tr-ime))
+  (tr-ime-advanced-install)
+  ;; IM のデフォルトを IME に設定
+  (setq default-input-method "W32-IME")
+  ;; IME のモードライン表示設定
+  (setq-default w32-ime-mode-line-state-indicator "[--]")
+  (setq w32-ime-mode-line-state-indicator-list '("[--]" "[あ]""[--]"))
+  ;; init
+  (w32-ime-initialize)
+  ;; key
+  (global-set-key "\C-o" 'toggle-input-method)
+  ;; IME 制御（yes/no などの入力の時に IME を off にする）
+  (wrap-function-to-control-ime 'universal-argument t nil)
+  (wrap-function-to-control-ime 'read-string nil nil)
+  (wrap-function-to-control-ime 'read-char nil nil)
+  (wrap-function-to-control-ime 'read-from-minibuffer nil nil)
+  (wrap-function-to-control-ime 'y-or-n-p nil nil)
+  (wrap-function-to-control-ime 'yes-or-no-p nil nil)
+  (wrap-function-to-control-ime 'map-y-or-n-p nil nil)
+  (wrap-function-to-control-ime 'register-read-with-preview nil nil)
   )
 
 (when (eq system-type 'gnu/linux)
