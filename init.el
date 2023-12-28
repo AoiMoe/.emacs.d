@@ -4,11 +4,10 @@
 ;;; Code:
 
 ;;; package setting
-(require 'package)
-;(add-to-list 'package-archives '("elpa-gnu" . "http://elpa.gnu.org/packages/") t)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 (package-initialize)
+(customize-set-variable 'package-archives
+                        `(,@package-archives
+                          ("melpa" . "https://melpa.org/packages/")))
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
