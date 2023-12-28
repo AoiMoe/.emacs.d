@@ -5,10 +5,10 @@
 
 ;;; package setting
 (require 'package)
-(package-initialize)
-(add-to-list 'package-archives '("elpa-gnu" . "http://elpa.gnu.org/packages/") t)
+;(add-to-list 'package-archives '("elpa-gnu" . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(package-initialize)
 
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -52,6 +52,7 @@
 ;;; key bindings
 (load-library "term/bobcat")
 (terminal-init-bobcat)
+
 
 ;; swap \C-w and \M-w
 (global-set-key "\C-w" 'kill-ring-save)
@@ -260,7 +261,7 @@
                         '(mouse-color . "white")
                         '(cursor-color . "red")
                         '(font . "fontset-standard")
-                        '(width . 160)
+                        '(width . 200)
                         '(height . 60)
                         ))
   (setq default-frame-alist (append my-frame-param default-frame-alist))
@@ -275,6 +276,106 @@
   (require 'mozc)
   (setq default-input-method "japanese-mozc")
   (global-set-key "\C-o" 'toggle-input-method)
+  )
+
+;;; which-key
+(use-package which-key
+  :init
+  (which-key-mode)
+  )
+
+;;; company
+(use-package company
+  :after company-statistics
+  :bind (("M-<tab>" . company-complete)
+         :map company-active-map
+         ;; C-n, C-pで補完候補を次/前の候補を選択
+         ("M-n" . nil)                      ;; M-nで次の候補への移動をキャンセル
+         ("M-p" . nil)                      ;; M-pでの前の候補への移動をキャンセル
+         ("C-n" . company-select-next)      ;; 次の補完候補を選択
+         ("C-p" . company-select-previous);; 前の補完候補を選択
+         ("C-s" . company-filter-candidates) ;; C-sで絞り込む
+         :map company-search-map
+         ;; 検索候補の移動をC-nとC-pで移動する
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous))
+  :init
+  ;; 全バッファで有効にする
+  (add-hook 'after-init-hook 'global-company-mode)
+  :config
+  (define-key emacs-lisp-mode-map (kbd "C-M-i") nil) ;; CUI版のためにemacs-lisp-modeでバインドされるC-M-iをアンバインド
+  (global-set-key (kbd "C-M-i") 'company-complete)   ;; CUI版ではM-<tab>はC-M-iに変換されるのでそれを利用
+  (setq completion-ignore-case t)
+  (setq company-idle-delay 0)                    ;; 待ち時間を0秒にする
+  (setq company-minimum-prefix-length 2)         ;; 補完できそうな文字が2文字以上入力されたら候補を表示
+  (setq company-selection-wrap-around t)         ;; 候補の一番下でさらに下に行こうとすると一番上に戻る
+  (setq company-transformers '(company-sort-by-occurrence company-sort-by-backend-importance))) ;; 利用頻度が高いものを候補の上に表示する
+
+(use-package company-statistics
+  :ensure t
+  :init
+  (company-statistics-mode))
+
+
+;;; treemacs
+(use-package treemacs
+  :ensure t
+  :defer t
+  :init
+  (with-eval-after-load 'winum
+    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+  :bind
+  (:map global-map
+        ("M-0"       . treemacs-select-window)
+        ("C-x t 1"   . treemacs-delete-other-windows)
+        ("C-x t t"   . treemacs)
+        ("C-x t B"   . treemacs-bookmark)
+        ("C-x t C-t" . treemacs-find-file)
+        ("C-x t M-t" . treemacs-find-tag))
+  )
+
+
+;; paren
+(use-package paren
+  :hook
+  (after-init . show-paren-mode)
+  :custom
+  (show-paren-style 'mixed)
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t)
+  :custom-face
+  (show-paren-match ((nil (:foreground "#007700" :background "#e0e0e0"))))
+  )
+
+
+;;; magit
+(use-package magit
+  :config
+  (global-set-key (kbd "C-x g") 'magit-status)
+  )
+
+
+;;; lsp
+(use-package lsp-mode
+  :config
+  (defun lsp-mode-init ()
+    (lsp)
+    (global-set-key (kbd "M-*") 'xref-pop-marker-stack)
+    (global-set-key (kbd "M-.") 'xref-find-definitions)
+    (global-set-key (kbd "M-/") 'xref-find-references))
+  (setq lsp-prefer-capf t)
+  :init
+  (setq lsp-keymap-prefix "C-c C-l")
+  )
+(use-package lsp-ui
+  :config
+  (setq lsp-ui-doc-enable t)
+  (setq lsp-ui-doc-header t)
+  (setq lsp-ui-doc-include-signature t)
+  (setq lsp-ui-doc-max-width 150)
+  (setq lsp-ui-doc-max-height 30)
+  (setq lsp-ui-peek-enable t)
+  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
   )
 
 
@@ -324,10 +425,21 @@
   )
 
 
+;;; golang
+(use-package go-mode
+  :init
+  (add-hook 'go-mode-hook #'lsp)
+  (add-hook 'before-save-hook 'gofmt-before-save)
+  )
+
+;;; protobuf
+(use-package protobuf-mode)
+
+
 ;;;
 (use-package helm
   :config
-  (require 'helm-config)
+;  (require 'helm-config)
   (global-set-key (kbd "C-c h") 'helm-mini)
   (global-set-key (kbd "C-c y") 'helm-show-kill-ring)
   )
@@ -451,14 +563,14 @@ Customize `guess-style-lighter-format-func' to change the variables."
  '(c-default-style "knf")
  '(dtrt-indent-min-soft-tab-superiority 5000.0)
  '(dtrt-indent-mode t nil (dtrt-indent))
+ '(package-selected-packages
+   '(protobuf-mode treemacs which-key neotree company go-mode lsp-ui lsp-mode lua-mode rust-mode auto-complete-c-headers helm flycheck use-package))
  '(ruby-insert-encoding-magic-comment nil)
- '(package-selected-packages (quote (auto-complete-c-headers helm flycheck use-package)))
  '(safe-local-variable-values
-   (quote
-    ((flycheck-gcc-include-path quote
-				(".."))
+   '((flycheck-gcc-include-path quote
+                                (".."))
      (flycheck-gcc-include quote
-			   (".."))
+                           (".."))
      (tab-stop . 4)
      (c-offsets-alist
       (knr-argdecl-intro . +)
@@ -497,7 +609,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
      (c-cleanup-list brace-else-brace empty-defun-braces defun-close-semi list-close-comma scope-operator)
      (c-comment-only-line-offset . 0)
      (c-recognize-knr-p . t)
-     (c-auto-newline)))))
+     (c-auto-newline))))
 
 (provide 'init)
 ;;; init.el ends here
