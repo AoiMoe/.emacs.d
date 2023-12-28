@@ -571,7 +571,8 @@ Customize `guess-style-lighter-format-func' to change the variables."
  '(my-face-tab ((t (:foreground "#DDFFFF" :underline t))) t)
  '(my-face-warn ((t (:background "#FFAAAA" :underline t))) t)
  '(my-face-warn-over-columns ((t (:background "gray"))) t)
- '(my-face-warn-zenkaku ((t (:background "gray"))) t))
+ '(my-face-warn-zenkaku ((t (:background "gray"))) t)
+ '(show-paren-match ((nil (:foreground "#007700" :background "#e0e0e0")))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -581,8 +582,11 @@ Customize `guess-style-lighter-format-func' to change the variables."
  '(c-default-style "knf")
  '(dtrt-indent-min-soft-tab-superiority 5000.0)
  '(dtrt-indent-mode t nil (dtrt-indent))
+ '(package-archives
+   '(("gnu" . "https://elpa.gnu.org/packages/")
+     ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(protobuf-mode treemacs which-key neotree company go-mode lsp-ui lsp-mode lua-mode rust-mode auto-complete-c-headers helm flycheck use-package))
+   '(ht magit protobuf-mode treemacs which-key neotree company go-mode lsp-ui lsp-mode lua-mode rust-mode auto-complete-c-headers helm flycheck use-package))
  '(ruby-insert-encoding-magic-comment nil)
  '(safe-local-variable-values
    '((flycheck-gcc-include-path quote
