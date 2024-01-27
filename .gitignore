@@ -4,3 +4,7 @@ recentf
 ac-comphist.dat
 elpa
 session.*
+.cache/
+.lsp-*
+company-statistics-cache.el
+transient/

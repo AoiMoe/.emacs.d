@@ -260,6 +260,7 @@
   (w32-ime-initialize)
   ;; key
   (global-set-key "\C-o" 'toggle-input-method)
+  (global-set-key [henkan] 'toggle-input-method)
   ;; IME 制御（yes/no などの入力の時に IME を off にする）
   (wrap-function-to-control-ime 'universal-argument t nil)
   (wrap-function-to-control-ime 'read-string nil nil)
@@ -294,6 +295,43 @@
   (require 'mozc)
   (setq default-input-method "japanese-mozc")
   (global-set-key "\C-o" 'toggle-input-method)
+  (global-set-key [henkan] 'toggle-input-method)
+  )
+
+;;; windmove
+(defun ignore-error-wrapper (fn)
+  "Funtion return new function that ignore errors.
+   The function wraps a function with `ignore-errors' macro."
+  (lexical-let ((fn fn))
+    (lambda ()
+      (interactive)
+      (ignore-errors
+        (funcall fn)))))
+(global-set-key (kbd "C-S-h") (ignore-error-wrapper 'windmove-left))
+(global-set-key (kbd "C-S-l") (ignore-error-wrapper 'windmove-right))
+(global-set-key (kbd "C-S-k") (ignore-error-wrapper 'windmove-up))
+(global-set-key (kbd "C-S-j") (ignore-error-wrapper 'windmove-down))
+
+;;; ace-window
+(use-package ace-window
+  :bind
+  ("C-x o" . ace-window)
+  :custom
+  (aw-keys '(?j ?k ?l ?i ?o ?h ?y ?u ?p))
+  (aw-ignore-current t)
+  (aw-ignore-on nil)
+  :custom-face
+  (aw-leading-char-face ((t (:height 4.0 :foreground "red"))))
+  )
+
+
+;;; hiwin
+(use-package hiwin
+  :config
+  (set-face-background 'hiwin-face "#F0F0F0")
+  (set-face-extend 'hiwin-face t)
+  :init
+  (hiwin-activate)
   )
 
 ;;; which-key
@@ -341,10 +379,10 @@
   :defer t
   :init
   (with-eval-after-load 'winum
-    (define-key winum-keymap (kbd "M-0") #'treemacs-select-window))
+    (define-key winum-keymap (kbd "C-x C-o") #'treemacs-select-window))
   :bind
   (:map global-map
-        ("M-0"       . treemacs-select-window)
+        ("C-x C-o"   . treemacs-select-window)
         ("C-x t 1"   . treemacs-delete-other-windows)
         ("C-x t t"   . treemacs)
         ("C-x t B"   . treemacs-bookmark)
@@ -361,8 +399,9 @@
   (show-paren-style 'mixed)
   (show-paren-when-point-inside-paren t)
   (show-paren-when-point-in-periphery t)
+  (set-face-extend 'show-paren-match t)
   :custom-face
-  (show-paren-match ((nil (:foreground "#007700" :background "#e0e0e0"))))
+  (show-paren-match ((nil (:background "#e0e0e0"))))
   )
 
 
@@ -386,16 +425,38 @@
   (setq lsp-keymap-prefix "C-c C-l")
   )
 (use-package lsp-ui
+  :custom
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-header t)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-position 'at-point) ;; top, bottom, or at-point
+  (lsp-ui-doc-max-width 150)
+  (lsp-ui-doc-max-height 30)
+  (lsp-ui-peek-enable t)
+  (lsp-ui-doc-use-childframe t)
+  (lsp-ui-doc-use-webkit t)
+  (lsp-ui-doc-show-with-cursor nil)
+  :preface
+  (defun toggle-lsp-ui-doc ()
+    (interactive)
+    (if lsp-ui-doc-show-with-cursor
+        (progn
+          (setq lsp-ui-doc-show-with-cursor nil)
+          (lsp-ui-doc--hide-frame))
+         (setq lsp-ui-doc-show-with-cursor t)))
   :config
-  (setq lsp-ui-doc-enable t)
-  (setq lsp-ui-doc-header t)
-  (setq lsp-ui-doc-include-signature t)
-  (setq lsp-ui-doc-max-width 150)
-  (setq lsp-ui-doc-max-height 30)
-  (setq lsp-ui-peek-enable t)
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  :bind
+  (:map lsp-mode-map
+        ("C-c C-r" . lsp-ui-peek-find-references)
+        ("C-c C-j" . lsp-ui-peek-find-definitions)
+        ("C-c i"   . lsp-ui-peek-find-implementation)
+        ("C-c m"   . lsp-ui-imenu)
+        ("C-c s"   . lsp-ui-sideline-mode)
+        ("C-c d"   . toggle-lsp-ui-doc)
+        )
   )
-
+(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
 
 ;;; flycheck
 (use-package flycheck
@@ -586,7 +647,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(ht magit protobuf-mode treemacs which-key neotree company go-mode lsp-ui lsp-mode lua-mode rust-mode auto-complete-c-headers helm flycheck use-package))
+   '(hiwin lsp-treemacs xref ht magit protobuf-mode treemacs which-key neotree company go-mode lsp-ui lsp-mode lua-mode rust-mode auto-complete-c-headers helm flycheck use-package))
  '(ruby-insert-encoding-magic-comment nil)
  '(safe-local-variable-values
    '((flycheck-gcc-include-path quote
