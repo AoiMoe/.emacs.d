@@ -330,6 +330,7 @@
   :config
   (set-face-background 'hiwin-face "#F0F0F0")
   (set-face-extend 'hiwin-face t)
+  (setq hiwin-always-active-buffer-name-regexp "^\\(\\*helm\\| \\*LV\\*\\)")
   :init
   (hiwin-activate)
   )
