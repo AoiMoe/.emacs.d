@@ -239,7 +239,7 @@
                              '(border-color . "black")
                              '(mouse-color . "white")
                              '(cursor-color . "black")
-                             '(width . 200)
+                             '(width . 220)
                              '(height . 60)
                              ))
   (setq default-frame-alist (append my-frame-param default-frame-alist))
@@ -280,7 +280,7 @@
                         '(mouse-color . "white")
                         '(cursor-color . "red")
                         '(font . "fontset-standard")
-                        '(width . 200)
+                        '(width . 220)
                         '(height . 60)
                         ))
   (setq default-frame-alist (append my-frame-param default-frame-alist))
@@ -293,6 +293,7 @@
                     'japanese-jisx0213.2004-1
                     (font-spec :family "RictyDiminished") nil 'prepend)
   (require 'mozc)
+  (setq mozc-candidate-style 'echo-area)
   (setq default-input-method "japanese-mozc")
   (global-set-key "\C-o" 'toggle-input-method)
   (global-set-key [henkan] 'toggle-input-method)
@@ -381,6 +382,8 @@
   :init
   (with-eval-after-load 'winum
     (define-key winum-keymap (kbd "C-x C-o") #'treemacs-select-window))
+  :custom
+  (treemacs-width 50)
   :bind
   (:map global-map
         ("C-x C-o"   . treemacs-select-window)
