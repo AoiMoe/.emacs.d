@@ -83,7 +83,6 @@
 (put 'narrow-to-region 'disabled nil)
 (setq next-line-add-newlines nil)
 (setq diff-switches "-u")
-(display-time)
 (setq line-number-mode t)
 (setq electric-indent-mode nil)
 (set-language-environment "Japanese")
@@ -222,7 +221,6 @@
 
 
 ;;; window system settings
-(tool-bar-mode 0)
 (when (eq system-type 'windows-nt)
   (set-face-attribute 'default nil
                       :family "ＭＳ ゴシック"
@@ -299,19 +297,35 @@
   (global-set-key [henkan] 'toggle-input-method)
   )
 
+(when (eq window-system 'mac)
+  (setq my-frame-param (list
+                        '(foreground-color . "black")
+                        '(background-color . "white")
+                        '(border-color . "black")
+                        '(mouse-color . "white")
+                        '(cursor-color . "red")
+                        '(width . 220)
+                        '(height . 60)
+                        ))
+  (setq default-frame-alist (append my-frame-param default-frame-alist))
+  (setq initial-frame-alist (append my-frame-param initial-frame-alist))
+  (setq-default line-spacing 2)
+  (set-face-attribute 'default nil :family "Ricty Diminished" :height 180)
+  (set-fontset-font nil 'japanese-jisx0208 (font-spec :family "Ricty Diminished"))
+  (set-fontset-font nil 'japanese-jisx0213.2004-1 (font-spec :family "Ricty Diminished"))
+  (set-fontset-font nil 'japanese-jisx0213-2 (font-spec :family "Ricty Diminished"))
+  (set-fontset-font nil 'katakana-jisx0201 (font-spec :family "Ricty Diminished"))
+  (set-fontset-font nil '(#x0080 . #x024F) (font-spec :family "Ricty Diminished"))
+  (set-fontset-font nil '(#x0370 . #x03FF) (font-spec :family "Ricty Diminished"))
+  (define-key global-map [?¥] [?\\])
+  (global-set-key [?\M-¥] 'delete-horizontal-space)
+  )
+
 ;;; windmove
-(defun ignore-error-wrapper (fn)
-  "Funtion return new function that ignore errors.
-   The function wraps a function with `ignore-errors' macro."
-  (lexical-let ((fn fn))
-    (lambda ()
-      (interactive)
-      (ignore-errors
-        (funcall fn)))))
-(global-set-key (kbd "C-S-h") (ignore-error-wrapper 'windmove-left))
-(global-set-key (kbd "C-S-l") (ignore-error-wrapper 'windmove-right))
-(global-set-key (kbd "C-S-k") (ignore-error-wrapper 'windmove-up))
-(global-set-key (kbd "C-S-j") (ignore-error-wrapper 'windmove-down))
+(global-set-key (kbd "C-S-h") 'windmove-left)
+(global-set-key (kbd "C-S-l") 'windmove-right)
+(global-set-key (kbd "C-S-k") 'windmove-up)
+(global-set-key (kbd "C-S-j") 'windmove-down)
 
 ;;; ace-window
 (use-package ace-window
@@ -438,7 +452,7 @@
   (lsp-ui-doc-max-height 30)
   (lsp-ui-peek-enable t)
   (lsp-ui-doc-use-childframe t)
-  (lsp-ui-doc-use-webkit t)
+  (lsp-ui-doc-use-webkit (not (eq window-system 'mac)))
   (lsp-ui-doc-show-with-cursor nil)
   :preface
   (defun toggle-lsp-ui-doc ()
@@ -646,6 +660,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(c-default-style "knf")
+ '(display-time-mode t)
  '(dtrt-indent-min-soft-tab-superiority 5000.0)
  '(dtrt-indent-mode t nil (dtrt-indent))
  '(package-archives
@@ -697,7 +712,8 @@ Customize `guess-style-lighter-format-func' to change the variables."
      (c-cleanup-list brace-else-brace empty-defun-braces defun-close-semi list-close-comma scope-operator)
      (c-comment-only-line-offset . 0)
      (c-recognize-knr-p . t)
-     (c-auto-newline))))
+     (c-auto-newline)))
+ '(tool-bar-mode nil))
 
 (provide 'init)
 ;;; init.el ends here
