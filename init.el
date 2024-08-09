@@ -271,30 +271,33 @@
   )
 
 (when (eq system-type 'gnu/linux)
-  (setq my-frame-param (list
-                        '(foreground-color . "black")
-                        '(background-color . "white")
-                        '(border-color . "black")
-                        '(mouse-color . "white")
-                        '(cursor-color . "red")
-                        '(font . "fontset-standard")
-                        '(width . 220)
-                        '(height . 60)
-                        ))
-  (setq default-frame-alist (append my-frame-param default-frame-alist))
-  (setq initial-frame-alist (append my-frame-param initial-frame-alist))
-  (setq-default line-spacing 2)
-  (set-fontset-font "fontset-standard"
-                    'ascii
-                    (font-spec :family "RictyDiminished" :size 14) nil 'prepend)
-  (set-fontset-font "fontset-standard"
-                    'japanese-jisx0213.2004-1
-                    (font-spec :family "RictyDiminished") nil 'prepend)
+  (when window-system
+    (setq my-frame-param (list
+                          '(foreground-color . "black")
+                          '(background-color . "white")
+                          '(border-color . "black")
+                          '(mouse-color . "white")
+                          '(cursor-color . "red")
+                          '(font . "fontset-standard")
+                          '(width . 220)
+                          '(height . 60)
+                          ))
+    (setq default-frame-alist (append my-frame-param default-frame-alist))
+    (setq initial-frame-alist (append my-frame-param initial-frame-alist))
+    (setq-default line-spacing 2)
+    (set-fontset-font "fontset-standard"
+                      'ascii
+                      (font-spec :family "RictyDiminished" :size 14) nil 'prepend)
+    (set-fontset-font "fontset-standard"
+                      'japanese-jisx0213.2004-1
+                      (font-spec :family "RictyDiminished") nil 'prepend)
+    (global-set-key [henkan] 'toggle-input-method)
+    )
+  (add-to-list 'load-path (expand-file-name "~/.local/mozc-emacs/share/emacs/site-lisp/emacs-mozc"))
   (require 'mozc)
   (setq mozc-candidate-style 'echo-area)
   (setq default-input-method "japanese-mozc")
   (global-set-key "\C-o" 'toggle-input-method)
-  (global-set-key [henkan] 'toggle-input-method)
   )
 
 (when (eq window-system 'mac)
@@ -329,6 +332,7 @@
 
 ;;; ace-window
 (use-package ace-window
+  :ensure t
   :bind
   ("C-x o" . ace-window)
   :custom
@@ -342,6 +346,7 @@
 
 ;;; hiwin
 (use-package hiwin
+  :ensure t
   :config
   (set-face-background 'hiwin-face "#F0F0F0")
   (set-face-extend 'hiwin-face t)
@@ -352,12 +357,14 @@
 
 ;;; which-key
 (use-package which-key
+  :ensure t
   :init
   (which-key-mode)
   )
 
 ;;; company
 (use-package company
+  :ensure t
   :after company-statistics
   :bind (("M-<tab>" . company-complete)
          :map company-active-map
@@ -411,6 +418,7 @@
 
 ;; paren
 (use-package paren
+  :ensure t
   :hook
   (after-init . show-paren-mode)
   :custom
@@ -425,6 +433,7 @@
 
 ;;; magit
 (use-package magit
+  :ensure t
   :config
   (global-set-key (kbd "C-x g") 'magit-status)
   )
@@ -432,6 +441,7 @@
 
 ;;; lsp
 (use-package lsp-mode
+  :ensure t
   :config
   (defun lsp-mode-init ()
     (lsp)
@@ -474,10 +484,14 @@
         ("C-c d"   . toggle-lsp-ui-doc)
         )
   )
-(use-package lsp-treemacs :commands lsp-treemacs-errors-list)
+(use-package lsp-treemacs 
+  :ensure t
+  :commands lsp-treemacs-errors-list
+  )
 
 ;;; flycheck
 (use-package flycheck
+  :ensure t
   :diminish flycheck-mode
   :config
   (add-hook 'after-init-hook #'global-flycheck-mode)
@@ -488,11 +502,13 @@
 
 ;;; rust
 (use-package rust-mode
+  :ensure t
   :config
   (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
   )
 
 (use-package company-racer
+  :ensure t
   :if (file-directory-p "~/.cargo/bin")
   :config
   (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
@@ -508,7 +524,8 @@
 
 
 ;;; erlang
-(use-package erlang-start
+(use-package erlang
+  :ensure t
   :if (file-directory-p "~/erlang/tools/emacs")
   :load-path "~/erlang/tools/emacs"
   :init
@@ -524,17 +541,20 @@
 
 ;;; golang
 (use-package go-mode
+  :ensure t
   :init
   (add-hook 'go-mode-hook #'lsp)
   (add-hook 'before-save-hook 'gofmt-before-save)
   )
 
 ;;; protobuf
-(use-package protobuf-mode)
-
+(use-package protobuf-mode
+  :ensure t
+  )
 
 ;;;
 (use-package helm
+  :ensure t
   :config
 ;  (require 'helm-config)
   (global-set-key (kbd "C-c h") 'helm-mini)
@@ -595,6 +615,7 @@
 
 ;;; dtrt-indent --- guess indentation.
 (use-package dtrt-indent
+  :ensure t
   :load-path "~/.emacs.d/site-lisp/dtrt-indent"
   :config
   (progn
@@ -627,6 +648,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
 
 ;;; Lua
 (use-package lua-mode
+  :ensure t
   :init
   (add-hook 'lua-mode-hook
             (lambda()
@@ -640,7 +662,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(aw-leading-char-face ((t (:height 4.0 :foreground "red"))))
+ '(aw-leading-char-face ((t (:height 4.0 :foreground "red"))) t)
  '(font-lock-comment-face ((t (:foreground "Firebrick"))))
  '(font-lock-constant-face ((t (:foreground "DarkOrange3"))))
  '(font-lock-function-name-face ((t (:foreground "Blue"))))
@@ -667,7 +689,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
    '(("gnu" . "https://elpa.gnu.org/packages/")
      ("melpa" . "https://melpa.org/packages/")))
  '(package-selected-packages
-   '(hiwin lsp-treemacs xref ht magit protobuf-mode treemacs which-key neotree company go-mode lsp-ui lsp-mode lua-mode rust-mode auto-complete-c-headers helm flycheck use-package))
+   '(company-statistics hiwin lsp-treemacs xref ht magit protobuf-mode treemacs which-key neotree company go-mode lsp-ui lsp-mode lua-mode rust-mode auto-complete-c-headers helm flycheck use-package))
  '(ruby-insert-encoding-magic-comment nil)
  '(safe-local-variable-values
    '((flycheck-gcc-include-path quote
