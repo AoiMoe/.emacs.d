@@ -626,6 +626,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(aw-leading-char-face ((t (:height 4.0 :foreground "red"))))
  '(font-lock-comment-face ((t (:foreground "Firebrick"))))
  '(font-lock-constant-face ((t (:foreground "DarkOrange3"))))
  '(font-lock-function-name-face ((t (:foreground "Blue"))))
@@ -637,7 +638,7 @@ Customize `guess-style-lighter-format-func' to change the variables."
  '(my-face-warn ((t (:background "#FFAAAA" :underline t))) t)
  '(my-face-warn-over-columns ((t (:background "gray"))) t)
  '(my-face-warn-zenkaku ((t (:background "gray"))) t)
- '(show-paren-match ((nil (:foreground "#007700" :background "#e0e0e0")))))
+ '(show-paren-match ((nil (:background "#e0e0e0")))))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
